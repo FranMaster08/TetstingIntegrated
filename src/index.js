@@ -47,7 +47,7 @@ app.on("ready", () => {
 function createNewProductWindow() {
   newProductWindow = new BrowserWindow({
     width: 400,
-    height: 330,
+    height: 230,
     title: "Add A New Product",
   });
   newProductWindow.setMenu(null);
@@ -77,7 +77,7 @@ ipcMain.on("product:new", (e, newProduct) => {
       name: "Resultados de Script",
       description: e,
     });
-    newProductWindow.close();
+    
   });
   pyshell.end(function (err) {
     if (err) throw err;
@@ -97,20 +97,20 @@ const templateMenu = [
     label: "File",
     submenu: [
       {
-        label: "New Product",
+        label: "Nueva conexión",
         accelerator: "Ctrl+N",
         click() {
           createNewProductWindow();
         },
       },
       {
-        label: "Remove All Products",
+        label: "Desconectar",
         click() {
           mainWindow.webContents.send("products:remove-all");
         },
       },
       {
-        label: "Exit",
+        label: "Salir",
         accelerator: process.platform == "darwin" ? "command+Q" : "Ctrl+Q",
         click() {
           app.quit();

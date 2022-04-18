@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>New Product</title>
+    <title>Consultar Equipo</title>
     <link rel="stylesheet" href="./bootstrap.min.css">
   </head>
   <body>
@@ -10,10 +10,8 @@
     <!-- Interface -->
     <form class="p-4">
       <div class="form-group">
-        <input type="text" id="name" class="form-control" placeholder="Product's Name" autofocus>
-      </div>
-      <div class="form-group">
-        <input type="text" id="description" class="form-control" placeholder="Description">
+        <input type="text" id="name" class="form-control" placeholder="Ingresar Dirección IP" autofocus>
+     
       </div>
       <button class="btn btn-primary btn-block">
         Save
@@ -29,11 +27,11 @@
         e.preventDefault();
 
         const nameProduct = document.querySelector('#name').value
-        const descProduct = document.querySelector('#description').value;
+        //const descProduct = document.querySelector('#description').value;
 
         const newProduct = {
           name: nameProduct,
-          description: descProduct
+          
         };
 
         ipcRenderer.send('product:new', newProduct);
