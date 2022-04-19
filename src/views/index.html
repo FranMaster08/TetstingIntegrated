@@ -10,9 +10,9 @@
 
 
     <div class="container-fluid p-4">
-      <div class="row" id="products">
+      <p class="row mx-auto" style="width: 60vw; font-weight: bold; color: black;" id="products">
         
-      </div>
+      </p>
     </div>
 
     <!-- Logic -->
@@ -22,12 +22,7 @@
 
       // New Product
       ipcRenderer.on('product:new', (e, newProduct) => {
-
-        // let inputTextValue = document.querySelector('#Terminal')
-
-        // inputTextValue.value += `\n${newProduct.description}`;
-
-        products.innerHTML+=  `<input id="Terminal" class="form-control" type="text"  value="${newProduct.description}"  aria-label="readonly input example">`
+        products.innerHTML+=  `${newProduct.description}<br/>`
         // const btns = document.querySelectorAll('.btn.btn-danger');
         // btns.forEach(btn => {
         //   btn.addEventListener('click', e => {

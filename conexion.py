@@ -1,7 +1,8 @@
 import telnetlib
-
+import sys
 #TELENET AL HOST XXXX
-HOST = "10.102.10.60"
+
+HOST = sys.argv[1]
 
 tn=telnetlib.Telnet(HOST, 9998)
 #TELENET CREDENCIALS

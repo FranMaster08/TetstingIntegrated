@@ -67,22 +67,23 @@ function createNewProductWindow() {
 // Ipc Renderer Events
 ipcMain.on("product:new", (e, newProduct) => {
   // send to the Main Window
-  let datas = "";
   let path = require("path");
   let myPythonScriptPath = path.resolve(__dirname, "../conexion.py");
   let { PythonShell } = require("python-shell");
-  let pyshell = new PythonShell(myPythonScriptPath);
+  let pyshell = new PythonShell(myPythonScriptPath , {args:[newProduct.name]});
   pyshell.on("message", (e) => {
     mainWindow.webContents.send("product:new", {
       name: "Resultados de Script",
       description: e,
     });
-    
+    newProductWindow.close();
   });
   pyshell.end(function (err) {
     if (err) throw err;
     console.log("finished");
+   
   });
+
 });
 
 ipcMain.on("telnet:response", (e) => {
