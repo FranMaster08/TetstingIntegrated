@@ -39,7 +39,7 @@ ipcMain.on("product:new", (e, newProduct) => {
   });
   pyshell.end(function (err) {
     if (err) throw err;
-    newProductWindow.close();
+    
   });
 });
 
@@ -49,10 +49,6 @@ ipcMain.on("agregarIp", (e , relation) => {
   guardarIp(ip , nombre)
   ventana2.webContents.send('agregarIp', relation);
 })
-
-
-
-
 
 const templateMenu = [
   {
