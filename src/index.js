@@ -1,30 +1,14 @@
-const {
-  app,
-  BrowserWindow,
-  Menu,
-  ipcMain,
-  dialog,
-  ipcRenderer,
-} = require("electron");
-
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
+const { guardarIp } = require("./models/guardarIp")
 const url = require("url");
 const path = require("path");
-const { log } = require("console");
 
 let mainWindow;
 let newProductWindow;
-
-// Reload in Development for Browser Windows
-if (process.env.NODE_ENV !== "production") {
-  require("electron-reload")(__dirname, {
-    electron: path.join(__dirname, "../node_modules", ".bin", "electron"),
-  });
-}
+let ventana2;
 
 app.on("ready", () => {
-  // The Main Window
   mainWindow = new BrowserWindow({ width: 720, height: 600 });
-
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "views/index.html"),
@@ -32,67 +16,44 @@ app.on("ready", () => {
       slashes: true,
     })
   );
-
-  // Menu
   const mainMenu = Menu.buildFromTemplate(templateMenu);
-  // Set The Menu to the Main Window
   Menu.setApplicationMenu(mainMenu);
-
-  // If we close main Window the App quit
   mainWindow.on("closed", () => {
     app.quit();
   });
 });
 
-function createNewProductWindow() {
-  newProductWindow = new BrowserWindow({
-    width: 400,
-    height: 230,
-    title: "Add A New Product",
-  });
-  newProductWindow.setMenu(null);
-
-  newProductWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "views/new-product.html"),
-      protocol: "file",
-      slashes: true,
-    })
-  );
-  newProductWindow.on("closed", () => {
-    newProductWindow = null;
-  });
-}
-
-// Ipc Renderer Events
 ipcMain.on("product:new", (e, newProduct) => {
   // send to the Main Window
   let path = require("path");
   let myPythonScriptPath = path.resolve(__dirname, "../conexion.py");
   let { PythonShell } = require("python-shell");
-  let pyshell = new PythonShell(myPythonScriptPath , {args:[newProduct.name]});
+  let pyshell = new PythonShell(myPythonScriptPath, {
+    args: [newProduct.name],
+  });
   pyshell.on("message", (e) => {
     mainWindow.webContents.send("product:new", {
       name: "Resultados de Script",
       description: e,
     });
-    newProductWindow.close();
   });
   pyshell.end(function (err) {
     if (err) throw err;
-    console.log("finished");
-   
+    newProductWindow.close();
   });
-
 });
 
-ipcMain.on("telnet:response", (e) => {
-  console.log(e);
-  console.log("Se llamo aca");
-  //dialog.showMessageBox(mainWindow, { message: e });
-});
 
-// Menu Template
+ipcMain.on("agregarIp", (e , relation) => {
+  const {ip , nombre} = relation
+  guardarIp(ip , nombre)
+  ventana2.webContents.send('agregarIp', relation);
+})
+
+
+
+
+
 const templateMenu = [
   {
     label: "File",
@@ -102,6 +63,13 @@ const templateMenu = [
         accelerator: "Ctrl+N",
         click() {
           createNewProductWindow();
+        },
+      },
+      {
+        label: "Ventana Prueba",
+        accelerator: "Ctrl+P",
+        click() {
+          ventana2Test();
         },
       },
       {
@@ -128,7 +96,46 @@ if (process.platform === "darwin") {
   });
 }
 
-// Developer Tools in Development Environment
+function createNewProductWindow() {
+  newProductWindow = new BrowserWindow({
+    width: 400,
+    height: 230,
+    title: "Add A New Product",
+  });
+  newProductWindow.setMenu(null);
+
+  newProductWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "views/new-product.html"),
+      protocol: "file",
+      slashes: true,
+    })
+  );
+  newProductWindow.on("closed", () => {
+    newProductWindow = null;
+  });
+}
+
+function ventana2Test() {
+  ventana2 = new BrowserWindow({
+    width: 1200,
+    height: 500,
+    title: "Vincular Ip",
+  });
+  ventana2.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "views/ventanaTets.html"),
+      protocol: "file",
+      slashes: true,
+    })
+  );
+
+  // ventana2.setMenu(nulll);
+
+  ventana2.on("closed", () => {
+    newProductWindow = null;
+  });
+}
 if (process.env.NODE_ENV !== "production") {
   templateMenu.push({
     label: "DevTools",
@@ -146,4 +153,3 @@ if (process.env.NODE_ENV !== "production") {
     ],
   });
 }
-
