@@ -28,7 +28,7 @@ ipcMain.on("product:new", (e, newProduct) => {
     const myPythonScriptPath = path.resolve(__dirname, "../conexion.py");
     const { PythonShell } = require("python-shell");
     const pyshell = new PythonShell(myPythonScriptPath, {
-      args: [newProduct.name],
+      args: [datos.ip],
     });
     pyshell.on("message", (e) => {
       ventanas.mainWindow.webContents.send("product:new", {
