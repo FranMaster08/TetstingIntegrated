@@ -130,6 +130,9 @@ function ventana2Test() {
     height: 500,
     title: "Vincular Ip",
   });
+  ventanas.ventana2.setMenu(null);
+
+
   ventanas.ventana2.loadURL(
     url.format({
       pathname: path.join(__dirname, "views/ventanaTets.html"),
