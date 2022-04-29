@@ -21,22 +21,33 @@ app.on("ready", () => {
 });
 
 ipcMain.on("product:new", (e, newProduct) => {
-  // send to the Main Window
-  let path = require("path");
-  let myPythonScriptPath = path.resolve(__dirname, "../conexion.py");
-  let { PythonShell } = require("python-shell");
-  let pyshell = new PythonShell(myPythonScriptPath, {
-    args: [newProduct.name],
-  });
-  pyshell.on("message", (e) => {
-    ventanas.mainWindow.webContents.send("product:new", {
-      name: "Resultados de Script",
-      description: e,
+  const datos = listarIp().find((item) => item.nombre === newProduct.name);
+
+  if (datos) {
+    const path = require("path");
+    const myPythonScriptPath = path.resolve(__dirname, "../conexion.py");
+    const { PythonShell } = require("python-shell");
+    const pyshell = new PythonShell(myPythonScriptPath, {
+      args: [newProduct.name],
     });
-  });
-  pyshell.end(function (err) {
-    if (err) throw err;
-  });
+    pyshell.on("message", (e) => {
+      ventanas.mainWindow.webContents.send("product:new", {
+        name: "Resultados de Script",
+        description: e,
+      });
+    });
+    pyshell.end(function (err) {
+      if (err) throw err;
+    });
+  
+    ventanas.newProductWindow.close()
+    
+   
+  } else {
+    ventanas.newProductWindow.webContents.send("mostrarAlerta");
+  }
+
+  // send to the Main Window
 });
 
 ipcMain.on("agregarIp", (e, relation) => {
@@ -44,8 +55,11 @@ ipcMain.on("agregarIp", (e, relation) => {
   guardarIp(ip, nombre);
   ventanas.ventana2.webContents.send("agregarIp", relation);
 });
-ipcMain.on("listarDispositivos", (e,nombreVentana) => {
+ipcMain.on("listarDispositivos", (e, nombreVentana) => {
   ventanas[nombreVentana].webContents.send("listarDispositivos", listarIp());
+});
+ipcMain.on("openProductos", (e) => {
+  ventana2Test();
 });
 
 const templateMenu = [
@@ -106,7 +120,7 @@ function createNewProductWindow() {
     })
   );
   ventanas.newProductWindow.on("closed", () => {
-    newProductWindow = null;
+    ventanas.newProductWindow = null;
   });
 }
 
@@ -134,7 +148,6 @@ if (process.env.NODE_ENV !== "production") {
     submenu: [
       {
         label: "Show/Hide Dev Tools",
-        accelerator: process.platform == "darwin" ? "Comand+D" : "Ctrl+D",
         click(item, focusedWindow) {
           focusedWindow.toggleDevTools();
         },

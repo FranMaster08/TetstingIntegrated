@@ -5,17 +5,63 @@
   <meta charset="UTF-8" />
   <title>Consultar Equipo</title>
   <link rel="stylesheet" href="./bootstrap.min.css" />
+  <style>
+    .btn-consultar{
+      box-sizing: border-box;
+      background:none;
+      border: 1px solid blue;
+      color: blue;
+      border-radius: 20px;
+      width: 40vw;
+      margin: auto;
+    }
+    .btn-consultar:hover {
+      box-sizing: border-box;
+      background:none;
+      color: blue;
+      cursor:pointer;
+      border: 2px solid blue;
+    }
+    #respuesta{
+      color: red;
+    }
+    .side-to-side{
+      display: flex;
+    }
+
+    .btn-nuevo,.side-to-side{
+      box-sizing: border-box;
+      background:none;
+      border: 1px solid blue;
+      color: blue;
+    }
+    .btn-nuevo:hover {
+      box-sizing: border-box;
+      background:none;
+      border: 1px solid blue;
+      color: blue;
+    }
+
+    .alertError{
+      display:none;
+      margin: 20px 0px;
+    }
+  </style>
 </head>
 
 <body>
   <!-- Interface -->
   <form class="p-4">
     <div class="form-group">
-      <select id="dispositivos" class="form-select form-control form-select-lg" aria-label=".form-select-lg example">
-        <option selected>Open this select menu</option>
-      </select>
+      <div class="side-to-side">
+        <input type="text" id="name" class="form-control" placeholder='Ingrese dispositivo'/>
+        <button class="btn btn-primary btn-nuevo" id="openNewProduct" >Nuevo</button>
+      </div>
+     
+      <label for="" id="respuesta" class="alertError">No se encontro dispositivo</label>
+     
     </div>
-    <button class="btn btn-primary btn-block">Save</button>
+    <button class="btn btn-primary btn-block btn-consultar">Consultar</button>
   </form>
 
   <!-- Logic -->
@@ -28,6 +74,7 @@
       ipcRenderer.send("listarDispositivos", 'newProductWindow');
     };
     const form = document.querySelector("form");
+
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.querySelector("#name").value;
@@ -37,15 +84,19 @@
       ipcRenderer.send("product:new", newProduct);
     });
 
+    document.querySelector("#openNewProduct").addEventListener("click",(e)=>{
+      e.preventDefault();
+      ipcRenderer.send("openProductos")
+    })
+
     ipcRenderer.on("listarDispositivos", (e, listado) => {
-      console.log('aca estamos');
       const dispositivos = document.querySelector("#dispositivos");
-      listado.forEach((item) => {
-        dispositivos.innerHTML += ` <option value="${item.id}">${item.nombre}</option>`;
-      });
     });
-
-
+    ipcRenderer.on('mostrarAlerta',()=> {
+      console.log('Somos los que somos');
+      document.querySelector('#respuesta').classList.toggle('alertError')
+    })
+    
     function addOptions(domElement, array) {
       const select = document.getElementsByName(domElement)[0];
       for (value in array) {
