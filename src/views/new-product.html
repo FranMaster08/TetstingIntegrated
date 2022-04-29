@@ -1,43 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Consultar Equipo</title>
-    <link rel="stylesheet" href="./bootstrap.min.css">
-  </head>
-  <body>
 
-    <!-- Interface -->
-    <form class="p-4">
-      <div class="form-group">
-        <input type="text" id="name" class="form-control" placeholder="Ingresar Dirección IP" autofocus>
-     
-      </div>
-      <button class="btn btn-primary btn-block">
-        Save
-      </button>
-    </form>
+<head>
+  <meta charset="UTF-8" />
+  <title>Consultar Equipo</title>
+  <link rel="stylesheet" href="./bootstrap.min.css" />
+</head>
 
-    <!-- Logic -->
-    <script>
-      const { ipcRenderer } = require('electron');
+<body>
+  <!-- Interface -->
+  <form class="p-4">
+    <div class="form-group">
+      <select id="dispositivos" class="form-select form-control form-select-lg" aria-label=".form-select-lg example">
+        <option selected>Open this select menu</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-block">Save</button>
+  </form>
 
-      const form = document.querySelector('form');
-      form.addEventListener('submit', e => {
-        e.preventDefault();
+  <!-- Logic -->
+  <script>
+    const {
+      ipcRenderer
+    } = require("electron");
+    window.onload = () => {
+      console.log('carga');
+      ipcRenderer.send("listarDispositivos", 'newProductWindow');
+    };
+    const form = document.querySelector("form");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.querySelector("#name").value;
+      const newProduct = {
+        name
+      };
+      ipcRenderer.send("product:new", newProduct);
+    });
 
-        const nameProduct = document.querySelector('#name').value
-        //const descProduct = document.querySelector('#description').value;
-
-        const newProduct = {
-          name: nameProduct,
-          
-        };
-
-        ipcRenderer.send('product:new', newProduct);
+    ipcRenderer.on("listarDispositivos", (e, listado) => {
+      console.log('aca estamos');
+      const dispositivos = document.querySelector("#dispositivos");
+      listado.forEach((item) => {
+        dispositivos.innerHTML += ` <option value="${item.id}">${item.nombre}</option>`;
       });
+    });
 
-    </script>
 
-  </body>
+    function addOptions(domElement, array) {
+      const select = document.getElementsByName(domElement)[0];
+      for (value in array) {
+        const option = document.createElement("option");
+        option.text = array[value];
+        select.add(option);
+      }
+    }
+  </script>
+</body>
+
 </html>

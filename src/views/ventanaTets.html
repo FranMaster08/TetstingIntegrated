@@ -2,231 +2,140 @@
 <html lang="es">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Relacion de Ip</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
   <style>
+    .cabecera {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 20px 20px 50px 50px;
+    }
+
+    .cabecera button {
+      margin: 10px;
+      align-self: flex-end;
+    }
+
     body {
-      color: #566787;
-      background: #f5f5f5;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    .table-responsive {
-      margin: 30px 0;
-    }
-
-    .table-wrapper {
-      min-width: 1000px;
-      background: #fff;
-      padding: 20px;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    }
-
-    .table-title {
-      padding-bottom: 10px;
-      margin: 0 0 10px;
-      min-width: 100%;
-    }
-
-    .table-title h2 {
-      margin: 8px 0 0;
-      font-size: 22px;
-    }
-
-    .search-box {
       position: relative;
-      float: right;
     }
 
-    .search-box input {
-      height: 34px;
+    .modal-form {
+      position: fixed;
+      top: 15%;
+      left: 35%;
+      background-color: rgba(42, 36, 47, 0.811);
+      padding: 40px 30px;
       border-radius: 20px;
-      padding-left: 35px;
-      border-color: #ddd;
-      box-shadow: none;
+      display: none;
     }
 
-    .search-box input:focus {
-      border-color: #3FBAE4;
+    .modal-form h4 {
+      color: aliceblue;
     }
 
-    .search-box i {
-      color: #a0a5b1;
-      position: absolute;
-      font-size: 19px;
-      top: 8px;
-      left: 10px;
+    .btn-section {
+      display: flex;
+      justify-content: space-around;
     }
 
-    table.table tr th,
-    table.table tr td {
-      border-color: #e9e9e9;
+    .btn-section button {
+      width: 45%;
     }
 
-    table.table-striped tbody tr:nth-of-type(odd) {
-      background-color: #fcfcfc;
+    .visibleModal {
+      display: block !important;
     }
 
-    table.table-striped.table-hover tbody tr:hover {
-      background: #f5f5f5;
-    }
-
-    table.table th i {
-      font-size: 13px;
-      margin: 0 5px;
-      cursor: pointer;
-    }
-
-    table.table td:last-child {
-      width: 130px;
-    }
-
-    table.table td a {
-      color: #a0a5b1;
-      display: inline-block;
-      margin: 0 5px;
-    }
-
-    table.table td a.view {
-      color: #03A9F4;
-    }
-
-    table.table td a.edit {
-      color: #FFC107;
-    }
-
-    table.table td a.delete {
-      color: #E34724;
-    }
-
-    table.table td i {
-      font-size: 19px;
-    }
-
-    .pagination {
-      float: right;
-      margin: 0 0 5px;
-    }
-
-    .pagination li a {
-      border: none;
-      font-size: 95%;
-      width: 30px;
-      height: 30px;
-      color: #999;
-      margin: 0 2px;
-      line-height: 30px;
-      border-radius: 30px !important;
-      text-align: center;
-      padding: 0;
-    }
-
-    .pagination li a:hover {
-      color: #666;
-    }
-
-    .pagination li.active a {
-      background: #03A9F4;
-    }
-
-    .pagination li.active a:hover {
-      background: #0397d6;
-    }
-
-    .pagination li.disabled i {
-      color: #ccc;
-    }
-
-    .pagination li i {
-      font-size: 16px;
-      padding-top: 6px
-    }
-
-    .hint-text {
-      float: left;
-      margin-top: 6px;
-      font-size: 95%;
+    .contenedor-principal {
+      width: 70vw;
+      margin: auto;
     }
   </style>
 </head>
 
 <body>
-  <div class="container-xl">
-    <div class="table-responsive">
-      <div class="table-wrapper">
-        <div class="table-title">
-          <div class="row">
-            <div class="col-sm-8">
-              <h2>Relacion <b>Ip</b></h2>
-            </div>
-            <div class="col-sm-4">
-               <input type="button" id="Ingresar" class="form-control btn btn-success m-3" value="Nueva Ip">
-               <div class="search-box">
-                <i class="material-icons">&#xE8B6;</i>
-                <input type="text" class="form-control" placeholder="Search&hellip;">
-              </div>
-            </div>
-          </div>
-        </div>
-        <table class="table table-striped table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Ip <i class="fa fa-sort"></i></th>
-              <th>Vehiculo</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="body-table">
-            
-          </tbody>
-        </table>
-        <!-- <div class="clearfix">
-          <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-          <ul class="pagination">
-            <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-            <li class="page-item"><a href="#" class="page-link">1</a></li>
-            <li class="page-item"><a href="#" class="page-link">2</a></li>
-            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-            <li class="page-item"><a href="#" class="page-link">4</a></li>
-            <li class="page-item"><a href="#" class="page-link">5</a></li>
-            <li class="page-item"><a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
-          </ul>
-        </div> -->
-      </div>
-    </div>
-  </div>
-  <form class="p-4">
-    <div class="form-group">
-      <input type="text" id="name" class="form-control" placeholder="Ingresar Dirección IP" autofocus>
-   
-    </div>
-    <button class="btn btn-primary btn-block">
-      Save
+  <div class="cabecera">
+    <h1>Listado de Dispositivos</h1>
+    <button type="button" class="btn btn-primary btn-xs visualizar">
+      Nuevo
     </button>
-  </form>
+  </div>
+  <div class="contenedor-principal">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Ip <i class="fa fa-sort"></i></th>
+          <th>Vehiculo</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="body-table"></tbody>
+    </table>
+  </div>
+
+  <div class="modal-form">
+    <h4>Nuevo Dispositivo</h4>
+    <br />
+    <form class="p-4">
+      <div class="form-group">
+        <input type="text" id="ip" class="form-control" placeholder="Ingresar Dirección IP" autofocus />
+        <br />
+        <input type="text" id="dispositivo" class="form-control" placeholder="Nombre Dispositivo" autofocus />
+      </div>
+      <div class="btn-section">
+        <button class="btn btn-primary" id="Ingresar">Save</button>
+        <button type="button" class="btn btn-danger visualizar">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
 </body>
 
-
 <script>
-    const { ipcRenderer } = require('electron');
-    const fs = require('fs')
-    const btn = document.querySelector('#Ingresar')
-    console.log(fs)
-    btn.addEventListener('click',(e)=>{
-        ipcRenderer.send('agregarIp', {id:1,ip:'12345678',nombre:'fran'});
-    })
-    ipcRenderer.on('agregarIp', (e, relation) => {
-    
-            document.querySelector('#body-table').innerHTML += `
+  const {
+    uuid
+  } = require("uuidv4");
+  const {
+    ipcRenderer
+  } = require("electron");
+  const btn = document.querySelector("#Ingresar");
+  const btncancel = document.querySelectorAll(".visualizar");
+  const formulario = document.querySelector("form");
+  btncancel.forEach((botones) => {
+    botones.addEventListener("click", (e) => {
+      console.log("Cancelar");
+      e.preventDefault();
+      document.querySelector(".modal-form").classList.toggle("visibleModal");
+    });
+  });
+
+  formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const ipDispositivo = document.querySelector("#ip");
+    const nameDispositivo = document.querySelector("#dispositivo");
+    ipcRenderer.send("agregarIp", {
+      id: uuid(),
+      ip: ipDispositivo.value,
+      nombre: nameDispositivo.value,
+    });
+    document.querySelector(".modal-form").classList.toggle("visibleModal");
+  });
+
+  window.onload = () => {
+    ipcRenderer.send("listarDispositivos", 'ventana2');
+  }
+
+  ipcRenderer.on("agregarIp", (e, relation) => {
+    document.querySelector("#body-table").innerHTML += `
              <tr>
               <td>${relation.id}</td>
               <td>${relation.ip}</td>
@@ -236,12 +145,24 @@
                 <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                 <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
               </td>
-            </tr>`
-    
-    })
+            </tr>`;
+  });
 
-    
+  ipcRenderer.on("listarDispositivos", (e,listado) => {
+    listado.forEach((itemListar) => {
+      document.querySelector("#body-table").innerHTML += `
+             <tr>
+              <td>${itemListar.id}</td>
+              <td>${itemListar.ip}</td>
+              <td>${itemListar.nombre}</td>
+              <td>
+                <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+              </td>
+            </tr>`;
+    });
+  });
 </script>
-
 
 </html>

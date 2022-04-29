@@ -1,15 +1,12 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
-const { guardarIp } = require("./models/guardarIp")
+const { guardarIp, listarIp } = require("./models/guardarIp");
 const url = require("url");
 const path = require("path");
-
-let mainWindow;
-let newProductWindow;
-let ventana2;
+let ventanas = {};
 
 app.on("ready", () => {
-  mainWindow = new BrowserWindow({ width: 720, height: 600 });
-  mainWindow.loadURL(
+  ventanas.mainWindow = new BrowserWindow({ width: 720, height: 600 });
+  ventanas.mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "views/index.html"),
       protocol: "file",
@@ -18,7 +15,7 @@ app.on("ready", () => {
   );
   const mainMenu = Menu.buildFromTemplate(templateMenu);
   Menu.setApplicationMenu(mainMenu);
-  mainWindow.on("closed", () => {
+  ventanas.mainWindow.on("closed", () => {
     app.quit();
   });
 });
@@ -32,37 +29,38 @@ ipcMain.on("product:new", (e, newProduct) => {
     args: [newProduct.name],
   });
   pyshell.on("message", (e) => {
-    mainWindow.webContents.send("product:new", {
+    ventanas.mainWindow.webContents.send("product:new", {
       name: "Resultados de Script",
       description: e,
     });
   });
   pyshell.end(function (err) {
     if (err) throw err;
-    
   });
 });
 
-
-ipcMain.on("agregarIp", (e , relation) => {
-  const {ip , nombre} = relation
-  guardarIp(ip , nombre)
-  ventana2.webContents.send('agregarIp', relation);
-})
+ipcMain.on("agregarIp", (e, relation) => {
+  const { ip, nombre } = relation;
+  guardarIp(ip, nombre);
+  ventanas.ventana2.webContents.send("agregarIp", relation);
+});
+ipcMain.on("listarDispositivos", (e,nombreVentana) => {
+  ventanas[nombreVentana].webContents.send("listarDispositivos", listarIp());
+});
 
 const templateMenu = [
   {
     label: "File",
     submenu: [
       {
-        label: "Nueva conexión",
+        label: "Consultar Equipo",
         accelerator: "Ctrl+N",
         click() {
           createNewProductWindow();
         },
       },
       {
-        label: "Ventana Prueba",
+        label: "Listado Ip",
         accelerator: "Ctrl+P",
         click() {
           ventana2Test();
@@ -71,7 +69,7 @@ const templateMenu = [
       {
         label: "Desconectar",
         click() {
-          mainWindow.webContents.send("products:remove-all");
+          ventanas.mainWindow.webContents.send("products:remove-all");
         },
       },
       {
@@ -93,32 +91,32 @@ if (process.platform === "darwin") {
 }
 
 function createNewProductWindow() {
-  newProductWindow = new BrowserWindow({
+  ventanas.newProductWindow = new BrowserWindow({
     width: 400,
     height: 230,
     title: "Add A New Product",
   });
-  newProductWindow.setMenu(null);
+  ventanas.newProductWindow.setMenu(null);
 
-  newProductWindow.loadURL(
+  ventanas.newProductWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "views/new-product.html"),
       protocol: "file",
       slashes: true,
     })
   );
-  newProductWindow.on("closed", () => {
+  ventanas.newProductWindow.on("closed", () => {
     newProductWindow = null;
   });
 }
 
 function ventana2Test() {
-  ventana2 = new BrowserWindow({
+  ventanas.ventana2 = new BrowserWindow({
     width: 1200,
     height: 500,
     title: "Vincular Ip",
   });
-  ventana2.loadURL(
+  ventanas.ventana2.loadURL(
     url.format({
       pathname: path.join(__dirname, "views/ventanaTets.html"),
       protocol: "file",
@@ -126,9 +124,7 @@ function ventana2Test() {
     })
   );
 
-  // ventana2.setMenu(nulll);
-
-  ventana2.on("closed", () => {
+  ventanas.ventana2.on("closed", () => {
     newProductWindow = null;
   });
 }
