@@ -1,53 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Consultar Equipo</title>
-    <link rel="stylesheet" href="./bootstrap.min.css">
-    <link rel="stylesheet" href="custom.css">
-   
-    <style>
-      body {
-        background:url('./img/Modular-Mining-Logo_180x180.svg');
-        background-size :auto;
-       
-      }
-    </style>
 
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>Consultar Equipo</title>
+  <link rel="stylesheet" href="./bootstrap.min.css">
+  <link rel="stylesheet" href="custom.css">
+
+  <style>
+    .fondo {
+      position: absolute;
+      background: url('./img/Modular-Mining-Logo_180x180.svg');
+      background-size: 8%;
+      opacity:  0.2;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+
+    }
+  </style>
+
+</head>
+
+<body>
 
 
-    <div class="container-fluid p-4">
-      <p class="row mx-auto" style="width: 60vw; font-weight: bold; color: black;" id="products">
-      
-      </p>
-    </div>
+  <div class="container-fluid p-4">
+    <p class="row mx-auto" style="width: 60vw; font-weight: bold; color: black;" id="products">
 
-    <!-- Logic -->
-    <script>
-      const { ipcRenderer } = require('electron');
-      const products = document.querySelector('#products');
+    </p>
+  </div>
+  <div class="fondo"></div>
 
-      // New Product
-      ipcRenderer.on('product:new', (e, newProduct) => {
-        products.innerHTML+=  `${newProduct.description}<br/>`
-        // const btns = document.querySelectorAll('.btn.btn-danger');
-        // btns.forEach(btn => {
-        //   btn.addEventListener('click', e => {
-        //     e.target.parentElement.parentElement.parentElement.remove();
-        //   });
-        // })
-      });
+  <!-- Logic -->
+  <script>
+    const {
+      ipcRenderer
+    } = require('electron');
+    const products = document.querySelector('#products');
 
-      // Remove All Products
-      ipcRenderer.on('products:remove-all', e => {
-        products.innerHTML = '';
-      });
+    // New Product
+    ipcRenderer.on('product:new', (e, newProduct) => {
+      products.innerHTML += `${newProduct.description}<br/>`
+      // const btns = document.querySelectorAll('.btn.btn-danger');
+      // btns.forEach(btn => {
+      //   btn.addEventListener('click', e => {
+      //     e.target.parentElement.parentElement.parentElement.remove();
+      //   });
+      // })
+    });
 
-      // Remove Single Product
-      function removeProduct(e) {
-      }
-    </script>
-  </body>
+    // Remove All Products
+    ipcRenderer.on('products:remove-all', e => {
+      products.innerHTML = '';
+    });
+
+    // Remove Single Product
+    function removeProduct(e) {}
+  </script>
+</body>
+
 </html>
