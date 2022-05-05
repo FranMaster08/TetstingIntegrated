@@ -64,7 +64,7 @@ ipcMain.on("openProductos", (e) => {
 
 const templateMenu = [
   {
-    label: "File",
+    label: "Inicio",
     submenu: [
       {
         label: "Consultar Equipo",
@@ -74,7 +74,7 @@ const templateMenu = [
         },
       },
       {
-        label: "Listado Ip",
+        label: "Registro de equipos",
         accelerator: "Ctrl+P",
         click() {
           ventana2Test();
@@ -107,7 +107,7 @@ if (process.platform === "darwin") {
 function createNewProductWindow() {
   ventanas.newProductWindow = new BrowserWindow({
     width: 400,
-    height: 230,
+    height: 240,
     title: "Add A New Product",
   });
   ventanas.newProductWindow.setMenu(null);
@@ -126,7 +126,7 @@ function createNewProductWindow() {
 
 function ventana2Test() {
   ventanas.ventana2 = new BrowserWindow({
-    width: 1200,
+    width: 700,
     height: 500,
     title: "Vincular Ip",
   });

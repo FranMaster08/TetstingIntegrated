@@ -24,4 +24,4 @@ try :
 
     tn.close()
 except :
-    print('Ocurrio un error!')
+    print('Error de conexion!')

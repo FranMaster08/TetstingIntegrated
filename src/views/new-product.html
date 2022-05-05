@@ -4,42 +4,54 @@
 <head>
   <meta charset="UTF-8" />
   <title>Consultar Equipo</title>
-  <link rel="stylesheet" href="./bootstrap.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+  
   <style>
-    .btn-consultar{
-      box-sizing: border-box;
-      background:none;
-      border: 1px solid blue;
-      color: blue;
-      border-radius: 20px;
+  body {
+    background: rgb(243, 242, 242)
+  }
+
+  .btn-consultar{
+      box-sizing:border-box;
+      background:white;
+      border: 1px solid white;
+      color: rgb(0, 153, 255);
+      border-radius: 5px;
       width: 40vw;
-      margin: auto;
-    }
+      margin:auto;  
+               
+  }
+
     .btn-consultar:hover {
       box-sizing: border-box;
-      background:none;
-      color: blue;
+      background:white;
+      color: rgb(0, 153, 255);
       cursor:pointer;
-      border: 2px solid blue;
+      border: 1px solid rgb(0, 153, 255);
     }
     #respuesta{
       color: red;
     }
     .side-to-side{
+      
       display: flex;
     }
-
+    .btn-section button {
+      width: 90%;
+    }
     .btn-nuevo,.side-to-side{
       box-sizing: border-box;
-      background:none;
-      border: 1px solid blue;
-      color: blue;
+      background:white;
+      border: 1px solid white;
+      color: rgb(0, 153, 255);
+      border-radius: 5px;
     }
     .btn-nuevo:hover {
       box-sizing: border-box;
-      background:none;
-      border: 1px solid blue;
-      color: blue;
+      background:white;
+      border: 1px solid rgb(0, 153, 255);
+      color: rgb(0, 153, 255);
     }
 
     .alertError{
